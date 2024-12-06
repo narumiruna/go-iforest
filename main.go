@@ -19,4 +19,7 @@ func main() {
 
 	predicts := model.Predict(y)
 	fmt.Println(predicts)
+
+	importances := model.FeatureImportance(y[0])
+	fmt.Println(importances)
 }

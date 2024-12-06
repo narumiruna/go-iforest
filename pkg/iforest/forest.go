@@ -131,3 +131,13 @@ func (f *IsolationForest) Predict(data Matrix) []int {
 	}
 	return predicts
 }
+
+func (f *IsolationForest) FeatureImportance(sample Vector) []int {
+	importance := make([]int, len(sample))
+	for _, tree := range f.Trees {
+		for i, v := range tree.FeatureImportance(sample) {
+			importance[i] += v
+		}
+	}
+	return importance
+}
