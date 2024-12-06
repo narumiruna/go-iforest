@@ -12,16 +12,34 @@ const (
 )
 
 type IsolationForest struct {
-	ScoreThreshold float64 `json:"score_threshold"`
-	NumTrees       int     `json:"num_trees"`
-	SampleSize     int     `json:"sample_size"`
-	MaxDepth       int     `json:"max_depth"`
+	ScoreThreshold float64
+	NumTrees       int
+	SampleSize     int
+	MaxDepth       int
 
 	Trees []*TreeNode
 }
 
+type IsolationForestOption struct {
+	ScoreThreshold float64 `json:"score_threshold"`
+	NumTrees       int     `json:"num_trees"`
+	SampleSize     int     `json:"sample_size"`
+	MaxDepth       int     `json:"max_depth"`
+}
+
 func New() *IsolationForest {
 	f := &IsolationForest{}
+	f.init()
+	return f
+}
+
+func NewWithOptions(options IsolationForestOption) *IsolationForest {
+	f := &IsolationForest{
+		ScoreThreshold: options.ScoreThreshold,
+		NumTrees:       options.NumTrees,
+		SampleSize:     options.SampleSize,
+		MaxDepth:       options.MaxDepth,
+	}
 	f.init()
 	return f
 }
