@@ -8,26 +8,26 @@ type TreeNode struct {
 	SplitValue float64
 }
 
-func (node *TreeNode) IsLeaf() bool {
-	return node.Left == nil && node.Right == nil
+func (t *TreeNode) IsLeaf() bool {
+	return t.Left == nil && t.Right == nil
 }
 
-func (node *TreeNode) traceSplitIndex(sample Vector, indices []int) []int {
-	if node.IsLeaf() {
+func (t *TreeNode) traceSplitIndex(sample Vector, indices []int) []int {
+	if t.IsLeaf() {
 		return indices
 	}
 
-	if sample[node.SplitIndex] < node.SplitValue {
-		indices = append(indices, node.SplitIndex)
-		return node.Left.traceSplitIndex(sample, indices)
+	if sample[t.SplitIndex] < t.SplitValue {
+		indices = append(indices, t.SplitIndex)
+		return t.Left.traceSplitIndex(sample, indices)
 	} else {
-		indices = append(indices, node.SplitIndex)
-		return node.Right.traceSplitIndex(sample, indices)
+		indices = append(indices, t.SplitIndex)
+		return t.Right.traceSplitIndex(sample, indices)
 	}
 }
 
-func (node *TreeNode) FeatureImportance(sample Vector) []int {
-	indices := node.traceSplitIndex(sample, []int{})
+func (t *TreeNode) FeatureImportance(sample Vector) []int {
+	indices := t.traceSplitIndex(sample, []int{})
 	importance := make([]int, len(sample))
 	for _, index := range indices {
 		importance[index]++
