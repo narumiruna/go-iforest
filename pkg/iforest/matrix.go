@@ -1,4 +1,4 @@
-package types
+package iforest
 
 import (
 	"math/rand"
@@ -22,24 +22,20 @@ func RandomMatrix(m, n int) Matrix {
 	return matrix
 }
 
-func (m Matrix) Shape() (int, int) {
+func (m Matrix) Shape() Shape {
 	if len(m) == 0 {
-		return 0, 0
+		return Shape{0, 0}
 	}
-	return len(m), len(m[0])
+	return Shape{len(m), len(m[0])}
 }
 
 func (m Matrix) Size(i int) int {
-	s1, s2 := m.Shape()
-	if i == 0 {
-		return s1
-	}
-	return s2
+	return m.Shape().Size(i)
 }
 
 func (m Matrix) ZerosLike() Matrix {
-	p, q := m.Shape()
-	return ZeroMatrix(p, q)
+	shape := m.Shape()
+	return ZeroMatrix(shape[0], shape[1])
 }
 
 func (m Matrix) AddScalar(scalar float64) Matrix {

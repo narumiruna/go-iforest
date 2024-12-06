@@ -3,8 +3,6 @@ package iforest
 import (
 	"math"
 	"math/rand"
-
-	"github.com/narumiruna/go-isolation-forest/pkg/types"
 )
 
 const (
@@ -45,7 +43,7 @@ func (f *IsolationForest) Initialize() {
 	}
 }
 
-func (f *IsolationForest) Fit(data types.Matrix) {
+func (f *IsolationForest) Fit(data Matrix) {
 	for i := 0; i < f.NumTrees; i++ {
 		sampledData := data.Sample(f.SampleSize)
 		tree := f.BuildTree(sampledData, 0)
@@ -53,8 +51,8 @@ func (f *IsolationForest) Fit(data types.Matrix) {
 	}
 }
 
-func (f *IsolationForest) BuildTree(data types.Matrix, currentHeight int) *TreeNode {
-	numSamples, numFeatures := data.Shape()
+func (f *IsolationForest) BuildTree(data Matrix, currentHeight int) *TreeNode {
+	numSamples, numFeatures := data.Size(0), data.Size(1)
 	if currentHeight >= f.HeightLimit || numSamples <= 1 {
 		return &TreeNode{Size: numSamples}
 	}
@@ -66,8 +64,8 @@ func (f *IsolationForest) BuildTree(data types.Matrix, currentHeight int) *TreeN
 
 	splitValue := rand.Float64()*(maxValue-minValue) + minValue
 
-	leftData := types.Matrix{}
-	rightData := types.Matrix{}
+	leftData := Matrix{}
+	rightData := Matrix{}
 	for _, vector := range data {
 		if vector[splitAttribute] < splitValue {
 			leftData = append(leftData, vector)
@@ -85,8 +83,8 @@ func (f *IsolationForest) BuildTree(data types.Matrix, currentHeight int) *TreeN
 
 }
 
-func (f *IsolationForest) Score(data types.Matrix) []float64 {
-	scores := types.ZeroVector(len(data))
+func (f *IsolationForest) Score(data Matrix) []float64 {
+	scores := ZeroVector(len(data))
 
 	for i, vector := range data {
 		s := 0.0
@@ -99,7 +97,7 @@ func (f *IsolationForest) Score(data types.Matrix) []float64 {
 	return scores
 }
 
-func (f *IsolationForest) Predict(data types.Matrix) []int {
+func (f *IsolationForest) Predict(data Matrix) []int {
 	predicts := make([]int, len(data))
 
 	scores := f.Score(data)

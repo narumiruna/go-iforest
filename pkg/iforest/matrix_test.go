@@ -1,4 +1,4 @@
-package types
+package iforest
 
 import (
 	"testing"
@@ -27,7 +27,7 @@ func TestRandomMatrix(t *testing.T) {
 
 func TestMatrixShape(t *testing.T) {
 	m := ZeroMatrix(2, 3)
-	rows, cols := m.Shape()
+	rows, cols := m.Size(0), m.Size(1)
 	if rows != 2 || cols != 3 {
 		t.Errorf("Expected shape (2, 3), got (%d, %d)", rows, cols)
 	}
