@@ -60,7 +60,7 @@ func (f *IsolationForest) BuildTree(data types.Matrix, currentHeight int) *TreeN
 	}
 
 	splitAttribute := rand.Intn(numFeatures)
-	slicedData := data.Slice(splitAttribute)
+	slicedData := data.Column(splitAttribute)
 	maxValue := slicedData.Max()
 	minValue := slicedData.Min()
 

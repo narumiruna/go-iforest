@@ -76,7 +76,7 @@ func TestMatrixSlice(t *testing.T) {
 	m := ZeroMatrix(2, 3)
 	m[0][1] = 1
 	m[1][1] = 2
-	slice := m.Slice(1)
+	slice := m.Column(1)
 	if slice[0] != 1 || slice[1] != 2 {
 		t.Errorf("Expected slice [1, 2], got [%f, %f]", slice[0], slice[1])
 	}
