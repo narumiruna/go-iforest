@@ -10,14 +10,15 @@ import (
 const (
 	defaultNumTrees   = 100
 	defaultSampleSize = 256
+	defaultThreshold  = 0.6
 )
 
 type IsolationForest struct {
-	Trees []*TreeNode
-
-	numTrees    int
-	sampleSize  int
-	heightLimit int
+	Trees       []*TreeNode
+	Threshold   float64
+	NumTrees    int
+	SampleSize  int
+	HeightLimit int
 }
 
 func NewIsolationForest() *IsolationForest {
@@ -27,40 +28,43 @@ func NewIsolationForest() *IsolationForest {
 }
 
 func (f *IsolationForest) Initialize() {
-	if f.numTrees == 0 {
-		f.numTrees = defaultNumTrees
+	if f.Threshold == 0 {
+		f.Threshold = defaultThreshold
 	}
 
-	if f.sampleSize == 0 {
-		f.sampleSize = defaultSampleSize
+	if f.NumTrees == 0 {
+		f.NumTrees = defaultNumTrees
 	}
 
-	if f.heightLimit == 0 {
-		f.heightLimit = int(math.Ceil(math.Log2(float64(f.sampleSize))))
+	if f.SampleSize == 0 {
+		f.SampleSize = defaultSampleSize
+	}
+
+	if f.HeightLimit == 0 {
+		f.HeightLimit = int(math.Ceil(math.Log2(float64(f.SampleSize))))
 	}
 }
 
-func (forest *IsolationForest) Fit(data types.Matrix) {
-	for i := 0; i < forest.numTrees; i++ {
-		sampledData := data.Sample(forest.sampleSize)
-		tree := forest.BuildTree(sampledData, 0)
-		forest.Trees = append(forest.Trees, tree)
+func (f *IsolationForest) Fit(data types.Matrix) {
+	for i := 0; i < f.NumTrees; i++ {
+		sampledData := data.Sample(f.SampleSize)
+		tree := f.BuildTree(sampledData, 0)
+		f.Trees = append(f.Trees, tree)
 	}
 }
 
 func (f *IsolationForest) BuildTree(data types.Matrix, currentHeight int) *TreeNode {
-	numSamples, dim := data.Shape()
-	if currentHeight >= f.heightLimit || numSamples <= 1 {
+	numSamples, numFeatures := data.Shape()
+	if currentHeight >= f.HeightLimit || numSamples <= 1 {
 		return &TreeNode{Size: numSamples}
 	}
 
-	splitAttribute := rand.Intn(dim)
+	splitAttribute := rand.Intn(numFeatures)
 	slicedData := data.Slice(splitAttribute)
 	maxValue := slicedData.Max()
 	minValue := slicedData.Min()
 
 	splitValue := rand.Float64()*(maxValue-minValue) + minValue
-	// fmt.Printf("splitAttribute: %d, maxValue: %f, minValue: %f, splitValue: %f\n", splitAttribute, maxValue, minValue, splitValue)
 
 	leftData := types.Matrix{}
 	rightData := types.Matrix{}
@@ -81,34 +85,18 @@ func (f *IsolationForest) BuildTree(data types.Matrix, currentHeight int) *TreeN
 
 }
 
-func (f *IsolationForest) pathLength(vector []float64, node *TreeNode, currentPathLength int) float64 {
-	if node.IsLeaf() || currentPathLength >= f.heightLimit {
-		return float64(currentPathLength) + averagePathLength(node.Size)
-	}
-
-	splitAttribute := node.SplitAttribute
-	splitValue := node.SplitValue
-	if vector[splitAttribute] < splitValue {
-		return f.pathLength(vector, node.Left, currentPathLength+1)
-	} else {
-		return f.pathLength(vector, node.Right, currentPathLength+1)
-	}
-}
-
 func (f *IsolationForest) Score(data types.Matrix) []float64 {
 	scores := types.ZeroVector(len(data))
 
-	for _, tree := range f.Trees {
-		for i, vector := range data {
-			scores[i] += f.pathLength(vector, tree, 0)
+	for i, vector := range data {
+		for _, tree := range f.Trees {
+			scores[i] += pathLength(vector, tree, 0)
 		}
+		scores[i] /= float64(len(f.Trees))
 	}
 
-	// average
-	scores.MulScalar(1.0 / float64(f.numTrees))
-
 	for i, s := range scores {
-		scores[i] = math.Pow(2.0, -s/averagePathLength(len(data)))
+		scores[i] = math.Pow(2.0, -s/averagePathLength(float64(f.SampleSize)))
 	}
 	return scores
 }

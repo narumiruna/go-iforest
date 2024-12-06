@@ -8,13 +8,26 @@ func harmonicNumber(x float64) float64 {
 	return math.Log(x) + eulerGamma
 }
 
-func averagePathLength(x int) float64 {
+func averagePathLength(x float64) float64 {
 	if x > 2 {
-		f := float64(x)
-		return 2.0*harmonicNumber(f-1) - 2.0*(f-1)/f
+		return 2.0*harmonicNumber(x-1) - 2.0*(x-1)/x
 	} else if x == 2 {
 		return 1.0
 	} else {
 		return 0.0
+	}
+}
+
+func pathLength(vector []float64, node *TreeNode, currentPathLength int) float64 {
+	if node.IsLeaf() {
+		return float64(currentPathLength) + averagePathLength(float64(node.Size))
+	}
+
+	splitAttribute := node.SplitAttribute
+	splitValue := node.SplitValue
+	if vector[splitAttribute] < splitValue {
+		return pathLength(vector, node.Left, currentPathLength+1)
+	} else {
+		return pathLength(vector, node.Right, currentPathLength+1)
 	}
 }
