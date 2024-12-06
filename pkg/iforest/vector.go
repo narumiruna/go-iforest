@@ -19,6 +19,12 @@ func RandomVector(n int) Vector {
 	return v
 }
 
+func (v Vector) Clone() Vector {
+	o := make(Vector, len(v))
+	copy(o, v)
+	return o
+}
+
 func (v Vector) Size() int {
 	return len(v)
 }
@@ -27,20 +33,26 @@ func (v Vector) ZerosLike() Vector {
 	return ZeroVector(len(v))
 }
 
-func (v Vector) AddScalar(scalar float64) Vector {
-	o := make(Vector, len(v))
+func (v Vector) AddScalar_(scalar float64) Vector {
 	for i := range v {
-		o[i] = v[i] + scalar
+		v[i] += scalar
 	}
-	return o
+	return v
+}
+
+func (v Vector) AddScalar(scalar float64) Vector {
+	return v.Clone().AddScalar_(scalar)
+}
+
+func (v Vector) MulScalar_(scalar float64) Vector {
+	for i := range v {
+		v[i] *= scalar
+	}
+	return v
 }
 
 func (v Vector) MulScalar(scalar float64) Vector {
-	o := make(Vector, len(v))
-	for i := range v {
-		o[i] = v[i] * scalar
-	}
-	return o
+	return v.Clone().MulScalar_(scalar)
 }
 
 func (v Vector) Max() float64 {

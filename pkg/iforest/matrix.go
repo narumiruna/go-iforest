@@ -22,6 +22,14 @@ func RandomMatrix(m, n int) Matrix {
 	return matrix
 }
 
+func (m Matrix) Clone() Matrix {
+	o := make(Matrix, len(m))
+	for i := range m {
+		o[i] = m[i].Clone()
+	}
+	return o
+}
+
 func (m Matrix) Shape() Shape {
 	if len(m) == 0 {
 		return Shape{0, 0}
@@ -38,20 +46,30 @@ func (m Matrix) ZerosLike() Matrix {
 	return ZeroMatrix(shape[0], shape[1])
 }
 
-func (m Matrix) AddScalar(scalar float64) Matrix {
-	o := make(Matrix, len(m))
+func (m Matrix) AddScalar_(scalar float64) Matrix {
 	for i := range m {
-		o[i] = m[i].AddScalar(scalar)
+		for j := range m[i] {
+			m[i][j] += scalar
+		}
 	}
-	return o
+	return m
+}
+
+func (m Matrix) AddScalar(scalar float64) Matrix {
+	return m.Clone().AddScalar_(scalar)
+}
+
+func (m Matrix) MulScalar_(scalar float64) Matrix {
+	for i := range m {
+		for j := range m[i] {
+			m[i][j] *= scalar
+		}
+	}
+	return m
 }
 
 func (m Matrix) MulScalar(scalar float64) Matrix {
-	o := make(Matrix, len(m))
-	for i := range m {
-		o[i] = m[i].MulScalar(scalar)
-	}
-	return o
+	return m.Clone().MulScalar_(scalar)
 }
 
 func (m Matrix) Sample(sampleSize int) Matrix {
