@@ -11,7 +11,7 @@ func main() {
 	x := iforest.RandomMatrix(1000, dim)
 	y := iforest.RandomMatrix(10, dim).AddScalar(0.5)
 
-	model := iforest.NewIsolationForest()
+	model := iforest.New()
 	model.Fit(x)
 
 	scores := model.Score(y)

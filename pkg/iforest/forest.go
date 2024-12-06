@@ -12,20 +12,21 @@ const (
 )
 
 type IsolationForest struct {
-	Trees          []*TreeNode
-	ScoreThreshold float64
-	NumTrees       int
-	SampleSize     int
-	HeightLimit    int
+	ScoreThreshold float64 `json:"score_threshold"`
+	NumTrees       int     `json:"num_trees"`
+	SampleSize     int     `json:"sample_size"`
+	MaxDepth       int     `json:"max_depth"`
+
+	Trees []*TreeNode
 }
 
-func NewIsolationForest() *IsolationForest {
+func New() *IsolationForest {
 	f := &IsolationForest{}
-	f.Initialize()
+	f.init()
 	return f
 }
 
-func (f *IsolationForest) Initialize() {
+func (f *IsolationForest) init() {
 	if f.ScoreThreshold == 0 {
 		f.ScoreThreshold = defaultScoreThreshold
 	}
@@ -38,36 +39,35 @@ func (f *IsolationForest) Initialize() {
 		f.SampleSize = defaultSampleSize
 	}
 
-	if f.HeightLimit == 0 {
-		f.HeightLimit = int(math.Ceil(math.Log2(float64(f.SampleSize))))
+	if f.MaxDepth == 0 {
+		f.MaxDepth = int(math.Ceil(math.Log2(float64(f.SampleSize))))
 	}
 }
 
-func (f *IsolationForest) Fit(data Matrix) {
+func (f *IsolationForest) Fit(samples Matrix) {
 	for i := 0; i < f.NumTrees; i++ {
-		sampledData := data.Sample(f.SampleSize)
-		tree := f.BuildTree(sampledData, 0)
+		sampled := samples.Sample(f.SampleSize)
+		tree := f.BuildTree(sampled, 0)
 		f.Trees = append(f.Trees, tree)
 	}
 }
 
-func (f *IsolationForest) BuildTree(data Matrix, currentHeight int) *TreeNode {
-	numSamples, numFeatures := data.Size(0), data.Size(1)
-	if currentHeight >= f.HeightLimit || numSamples <= 1 {
+func (f *IsolationForest) BuildTree(samples Matrix, depth int) *TreeNode {
+	numSamples, numFeatures := samples.Size(0), samples.Size(1)
+	if depth >= f.MaxDepth || numSamples <= 1 {
 		return &TreeNode{Size: numSamples}
 	}
 
-	splitAttribute := rand.Intn(numFeatures)
-	slicedData := data.Column(splitAttribute)
-	maxValue := slicedData.Max()
-	minValue := slicedData.Min()
-
+	splitIndex := rand.Intn(numFeatures)
+	column := samples.Column(splitIndex)
+	maxValue := column.Max()
+	minValue := column.Min()
 	splitValue := rand.Float64()*(maxValue-minValue) + minValue
 
 	leftData := Matrix{}
 	rightData := Matrix{}
-	for _, vector := range data {
-		if vector[splitAttribute] < splitValue {
+	for _, vector := range samples {
+		if vector[splitIndex] < splitValue {
 			leftData = append(leftData, vector)
 		} else {
 			rightData = append(rightData, vector)
@@ -75,10 +75,10 @@ func (f *IsolationForest) BuildTree(data Matrix, currentHeight int) *TreeNode {
 	}
 
 	return &TreeNode{
-		Left:           f.BuildTree(leftData, currentHeight+1),
-		Right:          f.BuildTree(rightData, currentHeight+1),
-		SplitAttribute: splitAttribute,
-		SplitValue:     splitValue,
+		Left:       f.BuildTree(leftData, depth+1),
+		Right:      f.BuildTree(rightData, depth+1),
+		SplitIndex: splitIndex,
+		SplitValue: splitValue,
 	}
 
 }

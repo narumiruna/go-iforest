@@ -23,7 +23,7 @@ func pathLength(vector []float64, node *TreeNode, currentPathLength int) float64
 		return float64(currentPathLength) + averagePathLength(float64(node.Size))
 	}
 
-	splitAttribute := node.SplitAttribute
+	splitAttribute := node.SplitIndex
 	splitValue := node.SplitValue
 	if vector[splitAttribute] < splitValue {
 		return pathLength(vector, node.Left, currentPathLength+1)
