@@ -6,17 +6,17 @@ import (
 )
 
 const (
-	defaultNumTrees   = 100
-	defaultSampleSize = 256
-	defaultThreshold  = 0.6
+	defaultNumTrees       = 100
+	defaultSampleSize     = 256
+	defaultScoreThreshold = 0.6
 )
 
 type IsolationForest struct {
-	Trees       []*TreeNode
-	Threshold   float64
-	NumTrees    int
-	SampleSize  int
-	HeightLimit int
+	Trees          []*TreeNode
+	ScoreThreshold float64
+	NumTrees       int
+	SampleSize     int
+	HeightLimit    int
 }
 
 func NewIsolationForest() *IsolationForest {
@@ -26,8 +26,8 @@ func NewIsolationForest() *IsolationForest {
 }
 
 func (f *IsolationForest) Initialize() {
-	if f.Threshold == 0 {
-		f.Threshold = defaultThreshold
+	if f.ScoreThreshold == 0 {
+		f.ScoreThreshold = defaultScoreThreshold
 	}
 
 	if f.NumTrees == 0 {
@@ -102,9 +102,9 @@ func (f *IsolationForest) Predict(data Matrix) []int {
 
 	scores := f.Score(data)
 
-	threshold := 0.6
+	ScoreThreshold := f.ScoreThreshold
 	for i, s := range scores {
-		if s > threshold {
+		if s > ScoreThreshold {
 			predicts[i] = 1
 		} else {
 			predicts[i] = 0
