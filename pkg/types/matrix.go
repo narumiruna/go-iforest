@@ -1,7 +1,7 @@
 package types
 
 import (
-	"math/rand/v2"
+	"math/rand"
 )
 
 type Matrix []Vector

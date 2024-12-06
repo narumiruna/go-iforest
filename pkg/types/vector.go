@@ -2,7 +2,7 @@ package types
 
 import (
 	"math"
-	"math/rand/v2"
+	"math/rand"
 )
 
 type Vector []float64
