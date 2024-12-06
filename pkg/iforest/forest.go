@@ -82,40 +82,40 @@ func (f *IsolationForest) BuildTree(samples Matrix, depth int) *TreeNode {
 	minValue := column.Min()
 	splitValue := rand.Float64()*(maxValue-minValue) + minValue
 
-	leftData := Matrix{}
-	rightData := Matrix{}
+	leftSamples := Matrix{}
+	rightSamples := Matrix{}
 	for _, vector := range samples {
 		if vector[splitIndex] < splitValue {
-			leftData = append(leftData, vector)
+			leftSamples = append(leftSamples, vector)
 		} else {
-			rightData = append(rightData, vector)
+			rightSamples = append(rightSamples, vector)
 		}
 	}
 
 	return &TreeNode{
-		Left:       f.BuildTree(leftData, depth+1),
-		Right:      f.BuildTree(rightData, depth+1),
+		Left:       f.BuildTree(leftSamples, depth+1),
+		Right:      f.BuildTree(rightSamples, depth+1),
 		SplitIndex: splitIndex,
 		SplitValue: splitValue,
 	}
 
 }
 
-func (f *IsolationForest) Score(data Matrix) []float64 {
-	scores := make([]float64, len(data))
-	for i, vector := range data {
+func (f *IsolationForest) Score(samples Matrix) []float64 {
+	scores := make([]float64, len(samples))
+	for i, sample := range samples {
 		s := 0.0
 		for _, tree := range f.Trees {
-			s += pathLength(vector, tree, 0)
+			s += pathLength(sample, tree, 0)
 		}
 		scores[i] = math.Pow(2.0, -s/float64(len(f.Trees))/averagePathLength(float64(f.SampleSize)))
 	}
 	return scores
 }
 
-func (f *IsolationForest) Predict(data Matrix) []int {
-	predicts := make([]int, len(data))
-	for i, s := range f.Score(data) {
+func (f *IsolationForest) Predict(samples Matrix) []int {
+	predicts := make([]int, len(samples))
+	for i, s := range f.Score(samples) {
 		if s > f.ScoreThreshold {
 			predicts[i] = 1
 		} else {
