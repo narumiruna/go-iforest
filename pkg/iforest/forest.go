@@ -29,7 +29,7 @@ type IsolationForestOption struct {
 
 func New() *IsolationForest {
 	f := &IsolationForest{}
-	f.init()
+	f.setDefaultValues()
 	return f
 }
 
@@ -40,11 +40,11 @@ func NewWithOptions(options IsolationForestOption) *IsolationForest {
 		SampleSize:     options.SampleSize,
 		MaxDepth:       options.MaxDepth,
 	}
-	f.init()
+	f.setDefaultValues()
 	return f
 }
 
-func (f *IsolationForest) init() {
+func (f *IsolationForest) setDefaultValues() {
 	if f.ScoreThreshold == 0 {
 		f.ScoreThreshold = defaultScoreThreshold
 	}
@@ -102,8 +102,7 @@ func (f *IsolationForest) BuildTree(samples Matrix, depth int) *TreeNode {
 }
 
 func (f *IsolationForest) Score(data Matrix) []float64 {
-	scores := ZeroVector(len(data))
-
+	scores := make([]float64, len(data))
 	for i, vector := range data {
 		s := 0.0
 		for _, tree := range f.Trees {
@@ -111,18 +110,13 @@ func (f *IsolationForest) Score(data Matrix) []float64 {
 		}
 		scores[i] = math.Pow(2.0, -s/float64(len(f.Trees))/averagePathLength(float64(f.SampleSize)))
 	}
-
 	return scores
 }
 
 func (f *IsolationForest) Predict(data Matrix) []int {
 	predicts := make([]int, len(data))
-
-	scores := f.Score(data)
-
-	ScoreThreshold := f.ScoreThreshold
-	for i, s := range scores {
-		if s > ScoreThreshold {
+	for i, s := range f.Score(data) {
+		if s > f.ScoreThreshold {
 			predicts[i] = 1
 		} else {
 			predicts[i] = 0
