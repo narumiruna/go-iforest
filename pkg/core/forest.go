@@ -1,8 +1,11 @@
 package core
 
 import (
+	"fmt"
 	"math"
 	"math/rand/v2"
+
+	"github.com/narumiruna/go-isolation-forest/pkg/types"
 )
 
 const (
@@ -40,29 +43,33 @@ func (f *IsolationForest) Initialize() {
 	}
 }
 
-func (forest *IsolationForest) Fit(data [][]float64) {
+func (forest *IsolationForest) Fit(data types.Matrix) {
 	for i := 0; i < forest.numTrees; i++ {
-		sampledData := sample(data, forest.sampleSize)
-
+		sampledData := data.Sample(forest.sampleSize)
 		tree := forest.BuildTree(sampledData, 0)
 		forest.Trees = append(forest.Trees, tree)
 	}
 }
 
-func (f *IsolationForest) BuildTree(data [][]float64, currentHeight int) *TreeNode {
-	if currentHeight >= f.heightLimit || len(data) <= 1 {
-		return &TreeNode{Size: len(data)}
+func (f *IsolationForest) BuildTree(data types.Matrix, currentHeight int) *TreeNode {
+	nRows, nCols := data.Shape()
+	fmt.Println("nRows:", nRows)
+	fmt.Println("nCols:", nCols)
+	if currentHeight >= f.heightLimit || nRows <= 1 {
+		return &TreeNode{Size: nRows}
 	}
 
-	splitAttribute := rand.IntN(len(data[0]))
-
-	maxValue := maxValue(slice(data, splitAttribute))
-	minValue := minValue(slice(data, splitAttribute))
+	splitAttribute := rand.IntN(nCols)
+	slicedData := data.Slice(splitAttribute)
+	maxValue := slicedData.Max()
+	minValue := slicedData.Min()
+	fmt.Println("maxValue:", maxValue)
+	fmt.Println("minValue:", minValue)
 
 	splitValue := rand.Float64()*(maxValue-minValue) + minValue
 
-	leftData := [][]float64{}
-	rightData := [][]float64{}
+	leftData := types.Matrix{}
+	rightData := types.Matrix{}
 	for _, vector := range data {
 		if vector[splitAttribute] < splitValue {
 			leftData = append(leftData, vector)
@@ -94,7 +101,7 @@ func (f *IsolationForest) pathLength(vector []float64, node *TreeNode, currentPa
 	}
 }
 
-func (f *IsolationForest) Score(data [][]float64) []float64 {
+func (f *IsolationForest) Score(data types.Matrix) []float64 {
 	scores := make([]float64, len(data))
 
 	if len(scores) != len(data) {
@@ -118,7 +125,7 @@ func (f *IsolationForest) Score(data [][]float64) []float64 {
 	return scores
 }
 
-func (f *IsolationForest) Predict(data [][]float64) []int {
+func (f *IsolationForest) Predict(data types.Matrix) []int {
 	predicts := make([]int, len(data))
 
 	scores := f.Score(data)
