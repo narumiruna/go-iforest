@@ -23,8 +23,8 @@ func TestRandomVector(t *testing.T) {
 
 func TestShape(t *testing.T) {
 	v := Vector{1, 2, 3}
-	if v.Shape() != 3 {
-		t.Errorf("Expected shape 3, got %d", v.Shape())
+	if v.Size() != 3 {
+		t.Errorf("Expected shape 3, got %d", v.Size())
 	}
 }
 

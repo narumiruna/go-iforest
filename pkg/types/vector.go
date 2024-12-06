@@ -19,8 +19,12 @@ func RandomVector(n int) Vector {
 	return v
 }
 
-func (v Vector) Shape() int {
+func (v Vector) Size() int {
 	return len(v)
+}
+
+func (v Vector) ZerosLike() Vector {
+	return ZeroVector(len(v))
 }
 
 func (v Vector) AddScalar(scalar float64) Vector {

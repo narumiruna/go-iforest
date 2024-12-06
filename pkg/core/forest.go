@@ -2,7 +2,7 @@ package core
 
 import (
 	"math"
-	"math/rand/v2"
+	"math/rand"
 
 	"github.com/narumiruna/go-isolation-forest/pkg/types"
 )
@@ -14,8 +14,6 @@ const (
 
 type IsolationForest struct {
 	Trees []*TreeNode
-
-	// threshold float64
 
 	numTrees    int
 	sampleSize  int
@@ -51,17 +49,18 @@ func (forest *IsolationForest) Fit(data types.Matrix) {
 }
 
 func (f *IsolationForest) BuildTree(data types.Matrix, currentHeight int) *TreeNode {
-	nRows, nCols := data.Shape()
-	if currentHeight >= f.heightLimit || nRows <= 1 {
-		return &TreeNode{Size: nRows}
+	numSamples, dim := data.Shape()
+	if currentHeight >= f.heightLimit || numSamples <= 1 {
+		return &TreeNode{Size: numSamples}
 	}
 
-	splitAttribute := rand.IntN(nCols)
+	splitAttribute := rand.Intn(dim)
 	slicedData := data.Slice(splitAttribute)
 	maxValue := slicedData.Max()
 	minValue := slicedData.Min()
 
 	splitValue := rand.Float64()*(maxValue-minValue) + minValue
+	// fmt.Printf("splitAttribute: %d, maxValue: %f, minValue: %f, splitValue: %f\n", splitAttribute, maxValue, minValue, splitValue)
 
 	leftData := types.Matrix{}
 	rightData := types.Matrix{}
@@ -83,7 +82,7 @@ func (f *IsolationForest) BuildTree(data types.Matrix, currentHeight int) *TreeN
 }
 
 func (f *IsolationForest) pathLength(vector []float64, node *TreeNode, currentPathLength int) float64 {
-	if node.IsLeaf() {
+	if node.IsLeaf() || currentPathLength >= f.heightLimit {
 		return float64(currentPathLength) + averagePathLength(node.Size)
 	}
 
@@ -97,11 +96,7 @@ func (f *IsolationForest) pathLength(vector []float64, node *TreeNode, currentPa
 }
 
 func (f *IsolationForest) Score(data types.Matrix) []float64 {
-	scores := make([]float64, len(data))
-
-	if len(scores) != len(data) {
-		panic("data and scores must have the same length")
-	}
+	scores := types.ZeroVector(len(data))
 
 	for _, tree := range f.Trees {
 		for i, vector := range data {
@@ -110,9 +105,7 @@ func (f *IsolationForest) Score(data types.Matrix) []float64 {
 	}
 
 	// average
-	for i := range scores {
-		scores[i] /= float64(len(f.Trees))
-	}
+	scores.MulScalar(1.0 / float64(f.numTrees))
 
 	for i, s := range scores {
 		scores[i] = math.Pow(2.0, -s/averagePathLength(len(data)))

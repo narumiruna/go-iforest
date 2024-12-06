@@ -37,6 +37,11 @@ func (m Matrix) Size(i int) int {
 	return s2
 }
 
+func (m Matrix) ZerosLike() Matrix {
+	p, q := m.Shape()
+	return ZeroMatrix(p, q)
+}
+
 func (m Matrix) AddScalar(scalar float64) Matrix {
 	o := make(Matrix, len(m))
 	for i := range m {
@@ -59,11 +64,11 @@ func (m Matrix) Sample(sampleSize int) Matrix {
 	}
 
 	perm := rand.Perm(len(m))
-	sampledData := make(Matrix, sampleSize)
+	o := make(Matrix, sampleSize)
 	for i := 0; i < sampleSize; i++ {
-		sampledData[i] = m[perm[i]]
+		o[i] = m[perm[i]]
 	}
-	return sampledData
+	return o
 }
 
 func (m Matrix) Slice(j int) Vector {
