@@ -71,7 +71,7 @@ func (m Matrix) Sample(sampleSize int) Matrix {
 	return o
 }
 
-func (m Matrix) Slice(j int) Vector {
+func (m Matrix) Column(j int) Vector {
 	slicedData := ZeroVector(len(m))
 	for i, row := range m {
 		slicedData[i] = row[j]
