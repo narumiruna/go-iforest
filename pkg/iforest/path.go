@@ -2,10 +2,10 @@ package iforest
 
 import "math"
 
-const eulerGamma = 0.5772156649
+const EulerGamma = 0.5772156649
 
 func harmonicNumber(x float64) float64 {
-	return math.Log(x) + eulerGamma
+	return math.Log(x) + EulerGamma
 }
 
 func averagePathLength(x float64) float64 {
