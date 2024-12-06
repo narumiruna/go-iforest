@@ -1,7 +1,6 @@
 package core
 
 import (
-	"fmt"
 	"math"
 	"math/rand/v2"
 
@@ -53,8 +52,6 @@ func (forest *IsolationForest) Fit(data types.Matrix) {
 
 func (f *IsolationForest) BuildTree(data types.Matrix, currentHeight int) *TreeNode {
 	nRows, nCols := data.Shape()
-	fmt.Println("nRows:", nRows)
-	fmt.Println("nCols:", nCols)
 	if currentHeight >= f.heightLimit || nRows <= 1 {
 		return &TreeNode{Size: nRows}
 	}
@@ -63,8 +60,6 @@ func (f *IsolationForest) BuildTree(data types.Matrix, currentHeight int) *TreeN
 	slicedData := data.Slice(splitAttribute)
 	maxValue := slicedData.Max()
 	minValue := slicedData.Min()
-	fmt.Println("maxValue:", maxValue)
-	fmt.Println("minValue:", minValue)
 
 	splitValue := rand.Float64()*(maxValue-minValue) + minValue
 

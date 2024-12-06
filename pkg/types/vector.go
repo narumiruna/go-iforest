@@ -24,17 +24,19 @@ func (v Vector) Shape() int {
 }
 
 func (v Vector) AddScalar(scalar float64) Vector {
+	o := make(Vector, len(v))
 	for i := range v {
-		v[i] += scalar
+		o[i] = v[i] + scalar
 	}
-	return v
+	return o
 }
 
 func (v Vector) MulScalar(scalar float64) Vector {
+	o := make(Vector, len(v))
 	for i := range v {
-		v[i] *= scalar
+		o[i] = v[i] * scalar
 	}
-	return v
+	return o
 }
 
 func (v Vector) Max() float64 {

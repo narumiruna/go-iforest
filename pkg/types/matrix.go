@@ -38,17 +38,19 @@ func (m Matrix) Size(i int) int {
 }
 
 func (m Matrix) AddScalar(scalar float64) Matrix {
+	o := make(Matrix, len(m))
 	for i := range m {
-		m[i] = m[i].AddScalar(scalar)
+		o[i] = m[i].AddScalar(scalar)
 	}
-	return m
+	return o
 }
 
 func (m Matrix) MulScalar(scalar float64) Matrix {
+	o := make(Matrix, len(m))
 	for i := range m {
-		m[i] = m[i].MulScalar(scalar)
+		o[i] = m[i].MulScalar(scalar)
 	}
-	return m
+	return o
 }
 
 func (m Matrix) Sample(sampleSize int) Matrix {
