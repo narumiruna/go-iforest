@@ -9,10 +9,11 @@ import (
 func main() {
 	data := [][]float64{
 		{1.1, 2.2},
-		{3.3, 4.4},
-		{5.5, 6.6},
-		{7.7, 8.8},
-		{9.9, 10.10},
+		{1.1, 2.2},
+		{1.1, 2.2},
+		{1.1, 2.2},
+		{1.1, 2.2},
+		{10, 20},
 	}
 
 	model := core.NewIsolationForest()
@@ -24,4 +25,7 @@ func main() {
 
 	scores := model.Score(data)
 	fmt.Println(scores)
+
+	predicts := model.Predict(data)
+	fmt.Println(predicts)
 }

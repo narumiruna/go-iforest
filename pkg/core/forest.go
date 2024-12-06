@@ -63,11 +63,11 @@ func (f *IsolationForest) BuildTree(data [][]float64, currentHeight int) *TreeNo
 
 	leftData := [][]float64{}
 	rightData := [][]float64{}
-	for _, row := range data {
-		if row[splitAttribute] < splitValue {
-			leftData = append(leftData, row)
+	for _, vector := range data {
+		if vector[splitAttribute] < splitValue {
+			leftData = append(leftData, vector)
 		} else {
-			rightData = append(rightData, row)
+			rightData = append(rightData, vector)
 		}
 	}
 
@@ -106,6 +106,31 @@ func (f *IsolationForest) Score(data [][]float64) []float64 {
 			scores[i] += f.pathLength(vector, tree, 0)
 		}
 	}
-	// return 2.0 ** (-s / self.average_path_length(self.sample_size))
+
+	// average
+	for i := range scores {
+		scores[i] /= float64(len(f.Trees))
+	}
+
+	for i, s := range scores {
+		scores[i] = math.Pow(2.0, -s/averagePathLength(len(data)))
+	}
 	return scores
+}
+
+func (f *IsolationForest) Predict(data [][]float64) []int {
+	predicts := make([]int, len(data))
+
+	scores := f.Score(data)
+
+	threshold := 0.6
+	for i, s := range scores {
+		if s > threshold {
+			predicts[i] = 1
+		} else {
+			predicts[i] = 0
+		}
+
+	}
+	return predicts
 }
