@@ -22,4 +22,6 @@ func main() {
 		fmt.Println(tree)
 	}
 
+	scores := model.Score(data)
+	fmt.Println(scores)
 }
