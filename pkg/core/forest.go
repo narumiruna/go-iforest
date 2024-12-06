@@ -89,15 +89,13 @@ func (f *IsolationForest) Score(data types.Matrix) []float64 {
 	scores := types.ZeroVector(len(data))
 
 	for i, vector := range data {
+		s := 0.0
 		for _, tree := range f.Trees {
-			scores[i] += pathLength(vector, tree, 0)
+			s += pathLength(vector, tree, 0)
 		}
-		scores[i] /= float64(len(f.Trees))
+		scores[i] = math.Pow(2.0, -s/float64(len(f.Trees))/averagePathLength(float64(f.SampleSize)))
 	}
 
-	for i, s := range scores {
-		scores[i] = math.Pow(2.0, -s/averagePathLength(float64(f.SampleSize)))
-	}
 	return scores
 }
 
