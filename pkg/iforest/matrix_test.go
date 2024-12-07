@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-// TestZeroMatrix verifies the ZeroMatrix function.
+// TestZeroMatrix verifies that ZeroMatrix returns a Matrix with correct dimensions and zero-initialized elements.
 func TestZeroMatrix(t *testing.T) {
 	m := ZeroMatrix(2, 3)
 	if len(m) != 2 || len(m[0]) != 3 {
@@ -19,7 +19,7 @@ func TestZeroMatrix(t *testing.T) {
 	}
 }
 
-// TestRandomMatrix verifies the RandomMatrix function.
+// TestRandomMatrix verifies that RandomMatrix returns a Matrix with correct dimensions and random elements.
 func TestRandomMatrix(t *testing.T) {
 	m := RandomMatrix(2, 3)
 	if len(m) != 2 || len(m[0]) != 3 {
@@ -27,7 +27,7 @@ func TestRandomMatrix(t *testing.T) {
 	}
 }
 
-// TestMatrixShape checks the Shape method of Matrix.
+// TestMatrixShape checks that the Shape method returns the correct dimensions of the Matrix.
 func TestMatrixShape(t *testing.T) {
 	m := ZeroMatrix(2, 3)
 	rows, cols := m.Size(0), m.Size(1)
@@ -36,7 +36,7 @@ func TestMatrixShape(t *testing.T) {
 	}
 }
 
-// TestMatrixSize checks the Size method of Matrix.
+// TestMatrixSize checks that the Size method returns the correct size of the specified dimension.
 func TestMatrixSize(t *testing.T) {
 	m := ZeroMatrix(2, 3)
 	if m.Size(0) != 2 || m.Size(1) != 3 {
@@ -44,7 +44,7 @@ func TestMatrixSize(t *testing.T) {
 	}
 }
 
-// TestMatrixAddScalar tests the AddScalar method of Matrix.
+// TestMatrixAddScalar tests that AddScalar correctly adds a scalar value to each element of the Matrix.
 func TestMatrixAddScalar(t *testing.T) {
 	m := ZeroMatrix(2, 3)
 	m = m.AddScalar(5)
@@ -57,7 +57,7 @@ func TestMatrixAddScalar(t *testing.T) {
 	}
 }
 
-// TestMatrixMulScalar tests the MulScalar method of Matrix.
+// TestMatrixMulScalar tests that MulScalar correctly multiplies each element of the Matrix by a scalar value.
 func TestMatrixMulScalar(t *testing.T) {
 	m := ZeroMatrix(2, 3)
 	m = m.AddScalar(2).MulScalar(3)
@@ -70,7 +70,7 @@ func TestMatrixMulScalar(t *testing.T) {
 	}
 }
 
-// TestMatrixSample tests the Sample method of Matrix.
+// TestMatrixSample tests that Sample returns a Matrix with the correct number of randomly selected rows.
 func TestMatrixSample(t *testing.T) {
 	m := RandomMatrix(10, 3)
 	sample := m.Sample(5)
@@ -79,7 +79,7 @@ func TestMatrixSample(t *testing.T) {
 	}
 }
 
-// TestMatrixColumn tests the Column method of Matrix.
+// TestMatrixColumn tests that Column correctly extracts a column from the Matrix as a Vector.
 func TestMatrixColumn(t *testing.T) {
 	m := ZeroMatrix(2, 3)
 	m[0][1] = 1

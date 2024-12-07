@@ -7,6 +7,21 @@ import (
 )
 
 // Quantile computes the q-th quantile of a slice of numbers.
+//
+// Parameters:
+//     numbers - a slice of float64 values to compute the quantile from.
+//     q - a float64 value between 0 and 1 representing the desired quantile.
+//
+// Returns:
+//     The computed quantile as a float64.
+//
+// Panics:
+//     If 'numbers' is empty.
+//     If 'q' is not between 0 and 1.
+//
+// Example:
+//     data := []float64{1, 2, 3, 4, 5}
+//     median := Quantile(data, 0.5)  // median == 3.0
 func Quantile(numbers []float64, q float64) float64 {
 	if len(numbers) == 0 {
 		panic("numbers must not be empty")

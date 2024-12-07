@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-// TestZeroVector verifies the ZeroVector function.
+// TestZeroVector verifies that ZeroVector returns a Vector of the correct size with all elements initialized to zero.
 func TestZeroVector(t *testing.T) {
 	v := ZeroVector(5)
 	expected := Vector{0, 0, 0, 0, 0}
@@ -15,7 +15,7 @@ func TestZeroVector(t *testing.T) {
 	}
 }
 
-// TestRandomVector verifies the RandomVector function.
+// TestRandomVector verifies that RandomVector returns a Vector of the correct size with random elements.
 func TestRandomVector(t *testing.T) {
 	v := RandomVector(5)
 	if len(v) != 5 {
@@ -23,7 +23,7 @@ func TestRandomVector(t *testing.T) {
 	}
 }
 
-// TestSize checks the Size method of Vector.
+// TestSize checks that the Size method returns the correct length of the Vector.
 func TestSize(t *testing.T) {
 	v := Vector{1, 2, 3}
 	if v.Size() != 3 {
@@ -31,7 +31,7 @@ func TestSize(t *testing.T) {
 	}
 }
 
-// TestAddScalar tests the AddScalar method.
+// TestAddScalar tests that AddScalar correctly adds a scalar value to each element of the Vector.
 func TestAddScalar(t *testing.T) {
 	v := Vector{1, 2, 3}
 	result := v.AddScalar(2)
@@ -43,7 +43,7 @@ func TestAddScalar(t *testing.T) {
 	}
 }
 
-// TestMulScalar tests the MulScalar method.
+// TestMulScalar tests that MulScalar correctly multiplies each element of the Vector by a scalar value.
 func TestMulScalar(t *testing.T) {
 	v := Vector{1, 2, 3}
 	result := v.MulScalar(2)
@@ -55,7 +55,7 @@ func TestMulScalar(t *testing.T) {
 	}
 }
 
-// TestMax checks the Max method.
+// TestMax checks that the Max method returns the largest value in the Vector.
 func TestMax(t *testing.T) {
 	v := Vector{1, 2, 3}
 	if v.Max() != 3 {
@@ -63,7 +63,7 @@ func TestMax(t *testing.T) {
 	}
 }
 
-// TestMin checks the Min method.
+// TestMin checks that the Min method returns the smallest value in the Vector.
 func TestMin(t *testing.T) {
 	v := Vector{1, 2, 3}
 	if v.Min() != 1 {
