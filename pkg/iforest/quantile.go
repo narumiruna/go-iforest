@@ -22,12 +22,11 @@ func Quantile(numbers []float64, q float64) float64 {
 	pos := q * (n - 1)
 	lowerIndex := int(math.Floor(pos))
 	upperIndex := int(math.Ceil(pos))
-	fraction := pos - float64(lowerIndex)
-
 	if lowerIndex == upperIndex {
 		return sortedNumbers[lowerIndex]
 	}
 
 	// linear interpolation
+	fraction := pos - float64(lowerIndex)
 	return sortedNumbers[lowerIndex] + fraction*(sortedNumbers[upperIndex]-sortedNumbers[lowerIndex])
 }
