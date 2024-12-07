@@ -9,6 +9,7 @@ const (
 	defaultNumTrees       = 100
 	defaultSampleSize     = 256
 	defaultScoreThreshold = 0.6
+	defaultDetectionType  = DetectionTypeThreshold
 )
 
 type DetectionType string
@@ -58,6 +59,10 @@ func NewWithOptions(options IsolationForestOption) *IsolationForest {
 }
 
 func (f *IsolationForest) setDefaultValues() {
+	if f.DetectionType == "" {
+		f.DetectionType = defaultDetectionType
+	}
+
 	if f.Threshold == 0 {
 		f.Threshold = defaultScoreThreshold
 	}

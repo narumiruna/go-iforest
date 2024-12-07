@@ -12,8 +12,8 @@ func main() {
 	y := iforest.RandomMatrix(10, dim).AddScalar(0.5)
 
 	model := iforest.New()
-	model.DetectionType = "proportion"
-	model.Proportion = 0.5
+	// model.DetectionType = "proportion"
+	// model.Proportion = 0.5
 
 	model.Fit(x)
 
