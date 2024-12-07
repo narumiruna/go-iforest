@@ -48,7 +48,7 @@ func TestMulScalar(t *testing.T) {
 	v := Vector{1, 2, 3}
 	result := v.MulScalar(2)
 	expected := Vector{2, 4, 6}
-	for i, val := result {
+	for i, val := range result {
 		if val != expected[i] {
 			t.Errorf("Expected %v, got %v", expected, result)
 		}
