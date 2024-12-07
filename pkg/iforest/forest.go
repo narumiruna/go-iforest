@@ -144,7 +144,7 @@ func (f *IsolationForest) Predict(samples Matrix) []int {
 	}
 
 	for i, score := range scores {
-		if score > threshold {
+		if score >= threshold {
 			predictions[i] = 1
 		} else {
 			predictions[i] = 0
