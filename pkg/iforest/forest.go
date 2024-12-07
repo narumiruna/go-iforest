@@ -91,8 +91,7 @@ func (f *IsolationForest) BuildTree(samples Matrix, depth int) *TreeNode {
 
 	splitIndex := rand.Intn(numFeatures)
 	column := samples.Column(splitIndex)
-	maxValue := column.Max()
-	minValue := column.Min()
+	minValue, maxValue := column.MinMax()
 	splitValue := rand.Float64()*(maxValue-minValue) + minValue
 
 	leftSamples := Matrix{}

@@ -74,3 +74,16 @@ func (v Vector) Min() float64 {
 	}
 	return minValue
 }
+
+func (v Vector) MinMax() (float64, float64) {
+	minValue, maxValue := math.Inf(1), math.Inf(-1)
+	for _, value := range v {
+		if value < minValue {
+			minValue = value
+		}
+		if value > maxValue {
+			maxValue = value
+		}
+	}
+	return minValue, maxValue
+}
