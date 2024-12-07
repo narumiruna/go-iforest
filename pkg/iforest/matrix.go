@@ -6,28 +6,28 @@ import (
 
 type Matrix []Vector
 
-func ZeroMatrix(m, n int) Matrix {
-	matrix := make(Matrix, m)
+func ZeroMatrix(rows, cols int) Matrix {
+	matrix := make(Matrix, rows)
 	for i := range matrix {
-		matrix[i] = ZeroVector(n)
+		matrix[i] = ZeroVector(cols)
 	}
 	return matrix
 }
 
-func RandomMatrix(m, n int) Matrix {
-	matrix := make(Matrix, m)
+func RandomMatrix(rows, cols int) Matrix {
+	matrix := make(Matrix, rows)
 	for i := range matrix {
-		matrix[i] = RandomVector(n)
+		matrix[i] = RandomVector(cols)
 	}
 	return matrix
 }
 
 func (m Matrix) Clone() Matrix {
-	o := make(Matrix, len(m))
+	clone := make(Matrix, len(m))
 	for i := range m {
-		o[i] = m[i].Clone()
+		clone[i] = m[i].Clone()
 	}
-	return o
+	return clone
 }
 
 func (m Matrix) Shape() Shape {
@@ -37,8 +37,8 @@ func (m Matrix) Shape() Shape {
 	return Shape{len(m), len(m[0])}
 }
 
-func (m Matrix) Size(i int) int {
-	return m.Shape().Size(i)
+func (m Matrix) Size(dim int) int {
+	return m.Shape().Size(dim)
 }
 
 func (m Matrix) ZerosLike() Matrix {
@@ -46,7 +46,7 @@ func (m Matrix) ZerosLike() Matrix {
 	return ZeroMatrix(shape[0], shape[1])
 }
 
-func (m Matrix) AddScalar_(scalar float64) Matrix {
+func (m Matrix) AddScalarInPlace(scalar float64) Matrix {
 	for i := range m {
 		for j := range m[i] {
 			m[i][j] += scalar
@@ -56,10 +56,10 @@ func (m Matrix) AddScalar_(scalar float64) Matrix {
 }
 
 func (m Matrix) AddScalar(scalar float64) Matrix {
-	return m.Clone().AddScalar_(scalar)
+	return m.Clone().AddScalarInPlace(scalar)
 }
 
-func (m Matrix) MulScalar_(scalar float64) Matrix {
+func (m Matrix) MulScalarInPlace(scalar float64) Matrix {
 	for i := range m {
 		for j := range m[i] {
 			m[i][j] *= scalar
@@ -69,7 +69,7 @@ func (m Matrix) MulScalar_(scalar float64) Matrix {
 }
 
 func (m Matrix) MulScalar(scalar float64) Matrix {
-	return m.Clone().MulScalar_(scalar)
+	return m.Clone().MulScalarInPlace(scalar)
 }
 
 func (m Matrix) Sample(sampleSize int) Matrix {
@@ -82,17 +82,17 @@ func (m Matrix) Sample(sampleSize int) Matrix {
 	}
 
 	perm := rand.Perm(len(m))
-	o := make(Matrix, sampleSize)
+	sample := make(Matrix, sampleSize)
 	for i := 0; i < sampleSize; i++ {
-		o[i] = m[perm[i]].Clone()
+		sample[i] = m[perm[i]].Clone()
 	}
-	return o
+	return sample
 }
 
-func (m Matrix) Column(j int) Vector {
-	o := ZeroVector(len(m))
+func (m Matrix) Column(colIndex int) Vector {
+	column := ZeroVector(len(m))
 	for i, row := range m {
-		o[i] = row[j]
+		column[i] = row[colIndex]
 	}
-	return o
+	return column
 }

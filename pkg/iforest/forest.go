@@ -11,6 +11,7 @@ const (
 	defaultSampleSize     = 256
 	defaultScoreThreshold = 0.6
 	defaultDetectionType  = DetectionTypeThreshold
+	offset                = 0.5
 )
 
 type DetectionType string
@@ -131,46 +132,46 @@ func (f *IsolationForest) BuildTree(samples Matrix, depth int) *TreeNode {
 func (f *IsolationForest) Score(samples Matrix) []float64 {
 	scores := make([]float64, len(samples))
 	for i, sample := range samples {
-		s := 0.0
+		score := 0.0
 		for _, tree := range f.Trees {
-			s += pathLength(sample, tree, 0)
+			score += pathLength(sample, tree, 0)
 		}
-		scores[i] = math.Pow(2.0, -s/float64(len(f.Trees))/averagePathLength(float64(f.SampleSize)))
+		scores[i] = math.Pow(2.0, -score/float64(len(f.Trees))/averagePathLength(float64(f.SampleSize)))
 	}
 	return scores
 }
 
 func (f *IsolationForest) Predict(samples Matrix) []int {
-	predicts := make([]int, len(samples))
+	predictions := make([]int, len(samples))
 	scores := f.Score(samples)
 
-	var t float64
+	var threshold float64
 	switch f.DetectionType {
 	case DetectionTypeThreshold:
-		t = f.Threshold
+		threshold = f.Threshold
 	case DetectionTypeProportion:
-		t = Quantile(f.Score(samples), 1-f.Proportion)
+		threshold = Quantile(f.Score(samples), 1-f.Proportion)
 	default:
 		panic("Invalid detection type")
 
 	}
 
-	for i, s := range scores {
-		if s > t {
-			predicts[i] = 1
+	for i, score := range scores {
+		if score > threshold {
+			predictions[i] = 1
 		} else {
-			predicts[i] = 0
+			predictions[i] = 0
 		}
 	}
 
-	return predicts
+	return predictions
 }
 
 func (f *IsolationForest) FeatureImportance(sample Vector) []int {
 	importance := make([]int, len(sample))
 	for _, tree := range f.Trees {
-		for i, v := range tree.FeatureImportance(sample) {
-			importance[i] += v
+		for i, value := range tree.FeatureImportance(sample) {
+			importance[i] += value
 		}
 	}
 	return importance

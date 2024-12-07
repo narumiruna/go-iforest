@@ -7,22 +7,22 @@ import (
 
 type Vector []float64
 
-func ZeroVector(n int) Vector {
-	return make(Vector, n)
+func ZeroVector(size int) Vector {
+	return make(Vector, size)
 }
 
-func RandomVector(n int) Vector {
-	v := make(Vector, n)
-	for i := range v {
-		v[i] = rand.Float64()
+func RandomVector(size int) Vector {
+	vector := make(Vector, size)
+	for i := range vector {
+		vector[i] = rand.Float64()
 	}
-	return v
+	return vector
 }
 
 func (v Vector) Clone() Vector {
-	o := make(Vector, len(v))
-	copy(o, v)
-	return o
+	clone := make(Vector, len(v))
+	copy(clone, v)
+	return clone
 }
 
 func (v Vector) Size() int {
@@ -33,7 +33,7 @@ func (v Vector) ZerosLike() Vector {
 	return ZeroVector(len(v))
 }
 
-func (v Vector) AddScalar_(scalar float64) Vector {
+func (v Vector) AddScalarInPlace(scalar float64) Vector {
 	for i := range v {
 		v[i] += scalar
 	}
@@ -41,10 +41,10 @@ func (v Vector) AddScalar_(scalar float64) Vector {
 }
 
 func (v Vector) AddScalar(scalar float64) Vector {
-	return v.Clone().AddScalar_(scalar)
+	return v.Clone().AddScalarInPlace(scalar)
 }
 
-func (v Vector) MulScalar_(scalar float64) Vector {
+func (v Vector) MulScalarInPlace(scalar float64) Vector {
 	for i := range v {
 		v[i] *= scalar
 	}
@@ -52,7 +52,7 @@ func (v Vector) MulScalar_(scalar float64) Vector {
 }
 
 func (v Vector) MulScalar(scalar float64) Vector {
-	return v.Clone().MulScalar_(scalar)
+	return v.Clone().MulScalarInPlace(scalar)
 }
 
 func (v Vector) Max() float64 {
