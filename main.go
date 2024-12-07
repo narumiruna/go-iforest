@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/narumiruna/go-isolation-forest/pkg/iforest"
+	"github.com/narumiruna/go-iforest/pkg/iforest"
 )
 
 func main() {
