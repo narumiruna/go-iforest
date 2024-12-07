@@ -4,6 +4,7 @@ import (
 	"testing"
 )
 
+// TestZeroMatrix verifies the ZeroMatrix function.
 func TestZeroMatrix(t *testing.T) {
 	m := ZeroMatrix(2, 3)
 	if len(m) != 2 || len(m[0]) != 3 {
@@ -18,6 +19,7 @@ func TestZeroMatrix(t *testing.T) {
 	}
 }
 
+// TestRandomMatrix verifies the RandomMatrix function.
 func TestRandomMatrix(t *testing.T) {
 	m := RandomMatrix(2, 3)
 	if len(m) != 2 || len(m[0]) != 3 {
@@ -25,6 +27,7 @@ func TestRandomMatrix(t *testing.T) {
 	}
 }
 
+// TestMatrixShape checks the Shape method of Matrix.
 func TestMatrixShape(t *testing.T) {
 	m := ZeroMatrix(2, 3)
 	rows, cols := m.Size(0), m.Size(1)
@@ -33,6 +36,7 @@ func TestMatrixShape(t *testing.T) {
 	}
 }
 
+// TestMatrixSize checks the Size method of Matrix.
 func TestMatrixSize(t *testing.T) {
 	m := ZeroMatrix(2, 3)
 	if m.Size(0) != 2 || m.Size(1) != 3 {
@@ -40,6 +44,7 @@ func TestMatrixSize(t *testing.T) {
 	}
 }
 
+// TestMatrixAddScalar tests the AddScalar method of Matrix.
 func TestMatrixAddScalar(t *testing.T) {
 	m := ZeroMatrix(2, 3)
 	m = m.AddScalar(5)
@@ -52,6 +57,7 @@ func TestMatrixAddScalar(t *testing.T) {
 	}
 }
 
+// TestMatrixMulScalar tests the MulScalar method of Matrix.
 func TestMatrixMulScalar(t *testing.T) {
 	m := ZeroMatrix(2, 3)
 	m = m.AddScalar(2).MulScalar(3)
@@ -64,6 +70,7 @@ func TestMatrixMulScalar(t *testing.T) {
 	}
 }
 
+// TestMatrixSample tests the Sample method of Matrix.
 func TestMatrixSample(t *testing.T) {
 	m := RandomMatrix(10, 3)
 	sample := m.Sample(5)
@@ -72,6 +79,7 @@ func TestMatrixSample(t *testing.T) {
 	}
 }
 
+// TestMatrixColumn tests the Column method of Matrix.
 func TestMatrixColumn(t *testing.T) {
 	m := ZeroMatrix(2, 3)
 	m[0][1] = 1

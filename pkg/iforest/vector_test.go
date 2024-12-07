@@ -4,6 +4,7 @@ import (
 	"testing"
 )
 
+// TestZeroVector verifies the ZeroVector function.
 func TestZeroVector(t *testing.T) {
 	v := ZeroVector(5)
 	expected := Vector{0, 0, 0, 0, 0}
@@ -14,6 +15,7 @@ func TestZeroVector(t *testing.T) {
 	}
 }
 
+// TestRandomVector verifies the RandomVector function.
 func TestRandomVector(t *testing.T) {
 	v := RandomVector(5)
 	if len(v) != 5 {
@@ -21,6 +23,7 @@ func TestRandomVector(t *testing.T) {
 	}
 }
 
+// TestSize checks the Size method of Vector.
 func TestSize(t *testing.T) {
 	v := Vector{1, 2, 3}
 	if v.Size() != 3 {
@@ -28,6 +31,7 @@ func TestSize(t *testing.T) {
 	}
 }
 
+// TestAddScalar tests the AddScalar method.
 func TestAddScalar(t *testing.T) {
 	v := Vector{1, 2, 3}
 	result := v.AddScalar(2)
@@ -39,6 +43,7 @@ func TestAddScalar(t *testing.T) {
 	}
 }
 
+// TestMulScalar tests the MulScalar method.
 func TestMulScalar(t *testing.T) {
 	v := Vector{1, 2, 3}
 	result := v.MulScalar(2)
@@ -50,6 +55,7 @@ func TestMulScalar(t *testing.T) {
 	}
 }
 
+// TestMax checks the Max method.
 func TestMax(t *testing.T) {
 	v := Vector{1, 2, 3}
 	if v.Max() != 3 {
@@ -57,6 +63,7 @@ func TestMax(t *testing.T) {
 	}
 }
 
+// TestMin checks the Min method.
 func TestMin(t *testing.T) {
 	v := Vector{1, 2, 3}
 	if v.Min() != 1 {

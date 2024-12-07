@@ -14,6 +14,7 @@ const (
 	offset                = 0.5
 )
 
+// DetectionType specifies the type of detection to use.
 type DetectionType string
 
 const (
@@ -21,6 +22,7 @@ const (
 	DetectionTypeProportion DetectionType = "proportion"
 )
 
+// Options contains configuration options for the IsolationForest.
 type Options struct {
 	DetectionType DetectionType `json:"detection_type"`
 	Threshold     float64       `json:"threshold"`
@@ -30,6 +32,7 @@ type Options struct {
 	MaxDepth      int           `json:"max_depth"`
 }
 
+// SetDefaultValues assigns default values to Options fields.
 func (o *Options) SetDefaultValues() {
 	if o.DetectionType == "" {
 		o.DetectionType = defaultDetectionType
@@ -52,23 +55,27 @@ func (o *Options) SetDefaultValues() {
 	}
 }
 
+// IsolationForest represents the isolation forest model.
 type IsolationForest struct {
 	*Options
 
 	Trees []*TreeNode
 }
 
+// New creates a new IsolationForest with default options.
 func New() *IsolationForest {
 	options := &Options{}
 	options.SetDefaultValues()
 	return &IsolationForest{Options: &Options{}}
 }
 
+// NewWithOptions creates a new IsolationForest with specified options.
 func NewWithOptions(options Options) *IsolationForest {
 	options.SetDefaultValues()
 	return &IsolationForest{Options: &options}
 }
 
+// Fit trains the isolation forest using the provided samples.
 func (f *IsolationForest) Fit(samples Matrix) {
 	wg := sync.WaitGroup{}
 	wg.Add(f.NumTrees)
@@ -86,6 +93,7 @@ func (f *IsolationForest) Fit(samples Matrix) {
 
 }
 
+// BuildTree constructs an isolation tree from the samples.
 func (f *IsolationForest) BuildTree(samples Matrix, depth int) *TreeNode {
 	numSamples, numFeatures := samples.Size(0), samples.Size(1)
 	if depth >= f.MaxDepth || numSamples <= 1 {
@@ -116,6 +124,7 @@ func (f *IsolationForest) BuildTree(samples Matrix, depth int) *TreeNode {
 
 }
 
+// Score computes anomaly scores for the samples.
 func (f *IsolationForest) Score(samples Matrix) []float64 {
 	scores := make([]float64, len(samples))
 	for i, sample := range samples {
@@ -128,6 +137,7 @@ func (f *IsolationForest) Score(samples Matrix) []float64 {
 	return scores
 }
 
+// Predict identifies anomalies in the samples.
 func (f *IsolationForest) Predict(samples Matrix) []int {
 	predictions := make([]int, len(samples))
 	scores := f.Score(samples)
@@ -154,6 +164,7 @@ func (f *IsolationForest) Predict(samples Matrix) []int {
 	return predictions
 }
 
+// FeatureImportance computes feature importance for a sample.
 func (f *IsolationForest) FeatureImportance(sample Vector) []int {
 	importance := make([]int, len(sample))
 	for _, tree := range f.Trees {

@@ -1,5 +1,6 @@
 package iforest
 
+// TreeNode represents a node in the isolation tree.
 type TreeNode struct {
 	Left       *TreeNode
 	Right      *TreeNode
@@ -8,10 +9,12 @@ type TreeNode struct {
 	SplitValue float64
 }
 
+// IsLeaf returns true if the node is a leaf.
 func (t *TreeNode) IsLeaf() bool {
 	return t.Left == nil && t.Right == nil
 }
 
+// traceSplitIndices traces the split indices for a sample.
 func (t *TreeNode) traceSplitIndices(sample Vector, indices []int) []int {
 	if t.IsLeaf() {
 		return indices
@@ -26,6 +29,7 @@ func (t *TreeNode) traceSplitIndices(sample Vector, indices []int) []int {
 	}
 }
 
+// FeatureImportance computes feature importance for a sample.
 func (t *TreeNode) FeatureImportance(sample Vector) []int {
 	indices := t.traceSplitIndices(sample, []int{})
 	importance := make([]int, len(sample))

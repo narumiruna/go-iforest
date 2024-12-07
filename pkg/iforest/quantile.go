@@ -6,6 +6,7 @@ import (
 	"sort"
 )
 
+// Quantile computes the q-th quantile of a slice of numbers.
 func Quantile(numbers []float64, q float64) float64 {
 	if len(numbers) == 0 {
 		panic("numbers must not be empty")

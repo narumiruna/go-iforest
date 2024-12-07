@@ -4,6 +4,7 @@ import (
 	"testing"
 )
 
+// TestQuantile tests the Quantile function.
 func TestQuantile(t *testing.T) {
 	cases := []struct {
 		numbers  []float64
