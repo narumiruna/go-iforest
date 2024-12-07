@@ -3,6 +3,7 @@ package iforest
 import (
 	"math"
 	"math/rand"
+	"sync"
 )
 
 const (
@@ -81,11 +82,20 @@ func (f *IsolationForest) setDefaultValues() {
 }
 
 func (f *IsolationForest) Fit(samples Matrix) {
+	wg := sync.WaitGroup{}
+	wg.Add(f.NumTrees)
+
+	f.Trees = make([]*TreeNode, f.NumTrees)
 	for i := 0; i < f.NumTrees; i++ {
 		sampled := samples.Sample(f.SampleSize)
-		tree := f.BuildTree(sampled, 0)
-		f.Trees = append(f.Trees, tree)
+		go func() {
+			defer wg.Done()
+			tree := f.BuildTree(sampled, 0)
+			f.Trees[i] = tree
+		}()
 	}
+	wg.Wait()
+
 }
 
 func (f *IsolationForest) BuildTree(samples Matrix, depth int) *TreeNode {
