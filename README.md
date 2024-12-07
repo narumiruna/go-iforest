@@ -1,5 +1,11 @@
 # go-iforest
 
+Go-iforest is a Go implementation of the Isolation Forest algorithm for anomaly detection. It identifies anomalies by isolating observations in random decision trees.
+
+[![GoDoc](https://pkg.go.dev/badge/github.com/narumiruna/go-iforest.svg)](https://pkg.go.dev/github.com/narumiruna/go-iforest)
+[![Go Report Card](https://goreportcard.com/badge/github.com/narumiruna/go-iforest)](https://goreportcard.com/report/github.com/narumiruna/go-iforest)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 ## Installation
 
 ```bash
