@@ -21,65 +21,52 @@ const (
 	DetectionTypeProportion DetectionType = "proportion"
 )
 
-type IsolationForest struct {
+type Options struct {
 	DetectionType DetectionType `json:"detection_type"`
 	Threshold     float64       `json:"threshold"`
 	Proportion    float64       `json:"proportion"`
 	NumTrees      int           `json:"num_trees"`
 	SampleSize    int           `json:"sample_size"`
 	MaxDepth      int           `json:"max_depth"`
+}
+
+func (o *Options) SetDefaultValues() {
+	if o.DetectionType == "" {
+		o.DetectionType = defaultDetectionType
+	}
+
+	if o.Threshold == 0 {
+		o.Threshold = defaultScoreThreshold
+	}
+
+	if o.NumTrees == 0 {
+		o.NumTrees = defaultNumTrees
+	}
+
+	if o.SampleSize == 0 {
+		o.SampleSize = defaultSampleSize
+	}
+
+	if o.MaxDepth == 0 {
+		o.MaxDepth = int(math.Ceil(math.Log2(float64(o.SampleSize))))
+	}
+}
+
+type IsolationForest struct {
+	*Options
 
 	Trees []*TreeNode
 }
 
-type IsolationForestOption struct {
-	DetectionType DetectionType `json:"detection_type"`
-	Threshold     float64       `json:"threshold"`
-	Proportion    float64       `json:"proportion"`
-	NumTrees      int           `json:"num_trees"`
-	SampleSize    int           `json:"sample_size"`
-	MaxDepth      int           `json:"max_depth"`
-}
-
 func New() *IsolationForest {
-	f := &IsolationForest{}
-	f.setDefaultValues()
-	return f
+	options := &Options{}
+	options.SetDefaultValues()
+	return &IsolationForest{Options: &Options{}}
 }
 
-func NewWithOptions(options IsolationForestOption) *IsolationForest {
-	f := &IsolationForest{
-		DetectionType: options.DetectionType,
-		Threshold:     options.Threshold,
-		Proportion:    options.Proportion,
-		NumTrees:      options.NumTrees,
-		SampleSize:    options.SampleSize,
-		MaxDepth:      options.MaxDepth,
-	}
-	f.setDefaultValues()
-	return f
-}
-
-func (f *IsolationForest) setDefaultValues() {
-	if f.DetectionType == "" {
-		f.DetectionType = defaultDetectionType
-	}
-
-	if f.Threshold == 0 {
-		f.Threshold = defaultScoreThreshold
-	}
-
-	if f.NumTrees == 0 {
-		f.NumTrees = defaultNumTrees
-	}
-
-	if f.SampleSize == 0 {
-		f.SampleSize = defaultSampleSize
-	}
-
-	if f.MaxDepth == 0 {
-		f.MaxDepth = int(math.Ceil(math.Log2(float64(f.SampleSize))))
-	}
+func NewWithOptions(options Options) *IsolationForest {
+	options.SetDefaultValues()
+	return &IsolationForest{Options: &options}
 }
 
 func (f *IsolationForest) Fit(samples Matrix) {
