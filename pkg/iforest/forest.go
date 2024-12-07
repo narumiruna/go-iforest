@@ -11,20 +11,31 @@ const (
 	defaultScoreThreshold = 0.6
 )
 
+type DetectionType string
+
+const (
+	DetectionTypeThreshold  DetectionType = "threshold"
+	DetectionTypeProportion DetectionType = "proportion"
+)
+
 type IsolationForest struct {
-	ScoreThreshold float64
-	NumTrees       int
-	SampleSize     int
-	MaxDepth       int
+	DetectionType DetectionType `json:"detection_type"`
+	Threshold     float64       `json:"threshold"`
+	Proportion    float64       `json:"proportion"`
+	NumTrees      int           `json:"num_trees"`
+	SampleSize    int           `json:"sample_size"`
+	MaxDepth      int           `json:"max_depth"`
 
 	Trees []*TreeNode
 }
 
 type IsolationForestOption struct {
-	ScoreThreshold float64 `json:"score_threshold"`
-	NumTrees       int     `json:"num_trees"`
-	SampleSize     int     `json:"sample_size"`
-	MaxDepth       int     `json:"max_depth"`
+	DetectionType DetectionType `json:"detection_type"`
+	Threshold     float64       `json:"threshold"`
+	Proportion    float64       `json:"proportion"`
+	NumTrees      int           `json:"num_trees"`
+	SampleSize    int           `json:"sample_size"`
+	MaxDepth      int           `json:"max_depth"`
 }
 
 func New() *IsolationForest {
@@ -35,18 +46,20 @@ func New() *IsolationForest {
 
 func NewWithOptions(options IsolationForestOption) *IsolationForest {
 	f := &IsolationForest{
-		ScoreThreshold: options.ScoreThreshold,
-		NumTrees:       options.NumTrees,
-		SampleSize:     options.SampleSize,
-		MaxDepth:       options.MaxDepth,
+		DetectionType: options.DetectionType,
+		Threshold:     options.Threshold,
+		Proportion:    options.Proportion,
+		NumTrees:      options.NumTrees,
+		SampleSize:    options.SampleSize,
+		MaxDepth:      options.MaxDepth,
 	}
 	f.setDefaultValues()
 	return f
 }
 
 func (f *IsolationForest) setDefaultValues() {
-	if f.ScoreThreshold == 0 {
-		f.ScoreThreshold = defaultScoreThreshold
+	if f.Threshold == 0 {
+		f.Threshold = defaultScoreThreshold
 	}
 
 	if f.NumTrees == 0 {
@@ -115,14 +128,27 @@ func (f *IsolationForest) Score(samples Matrix) []float64 {
 
 func (f *IsolationForest) Predict(samples Matrix) []int {
 	predicts := make([]int, len(samples))
-	for i, s := range f.Score(samples) {
-		if s > f.ScoreThreshold {
+	scores := f.Score(samples)
+
+	var t float64
+	switch f.DetectionType {
+	case DetectionTypeThreshold:
+		t = f.Threshold
+	case DetectionTypeProportion:
+		t = Quantile(f.Score(samples), 1-f.Proportion)
+	default:
+		panic("Invalid detection type")
+
+	}
+
+	for i, s := range scores {
+		if s > t {
 			predicts[i] = 1
 		} else {
 			predicts[i] = 0
 		}
-
 	}
+
 	return predicts
 }
 
