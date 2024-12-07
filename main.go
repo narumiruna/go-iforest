@@ -13,7 +13,7 @@ func main() {
 
 	model := iforest.New()
 	model.DetectionType = "proportion"
-	model.Proportion = 0.1
+	model.Proportion = 0.5
 
 	model.Fit(x)
 

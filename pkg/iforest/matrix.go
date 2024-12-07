@@ -73,22 +73,26 @@ func (m Matrix) MulScalar(scalar float64) Matrix {
 }
 
 func (m Matrix) Sample(sampleSize int) Matrix {
+	if sampleSize <= 0 {
+		panic("sampleSize must be greater than 0")
+	}
+
 	if len(m) <= sampleSize {
-		return m
+		return m.Clone()
 	}
 
 	perm := rand.Perm(len(m))
 	o := make(Matrix, sampleSize)
 	for i := 0; i < sampleSize; i++ {
-		o[i] = m[perm[i]]
+		o[i] = m[perm[i]].Clone()
 	}
 	return o
 }
 
 func (m Matrix) Column(j int) Vector {
-	slicedData := ZeroVector(len(m))
+	o := ZeroVector(len(m))
 	for i, row := range m {
-		slicedData[i] = row[j]
+		o[i] = row[j]
 	}
-	return slicedData
+	return o
 }
