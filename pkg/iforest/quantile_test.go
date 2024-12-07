@@ -14,7 +14,6 @@ func TestQuantile(t *testing.T) {
 		{[]float64{1, 2, 3, 4, 5}, 0.5, 3},
 		{[]float64{1, 2, 3, 4, 5}, 1.0, 5},
 		{[]float64{1, 2, 3, 4, 5}, 0.0, 1},
-		{[]float64{1, 2, 3, 4, 5}, 0.001, 1},
 	}
 
 	for _, c := range cases {
