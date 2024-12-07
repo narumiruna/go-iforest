@@ -6,18 +6,18 @@ import (
 	"sort"
 )
 
-// Quantile computes the q-th quantile of a slice of numbers.
+// Quantile computes the q-th quantile of a slice of numbers using linear interpolation.
 //
 // Parameters:
 //     numbers - a slice of float64 values to compute the quantile from.
-//     q - a float64 value between 0 and 1 representing the desired quantile.
+//     q       - a float64 value between 0 and 1 representing the desired quantile.
 //
 // Returns:
 //     The computed quantile as a float64.
 //
 // Panics:
 //     If 'numbers' is empty.
-//     If 'q' is not between 0 and 1.
+//     If 'q' is not between 0 and 1 (inclusive).
 //
 // Example:
 //     data := []float64{1, 2, 3, 4, 5}
