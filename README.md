@@ -1,1 +1,1 @@
-# go-isolation-forest
+# go-iforest
