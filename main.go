@@ -16,7 +16,7 @@ func main() {
 			NumTrees:      100,
 			SampleSize:    256,
 			DetectionType: "threshold",
-			Proportion:    0.6,
+			Threshold:     0.6,
 		},
 	)
 
