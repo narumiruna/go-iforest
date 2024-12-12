@@ -5,6 +5,9 @@ import (
 )
 
 // TestQuantile tests the Quantile function with various datasets and quantile values.
+// It iterates over a set of test cases, each containing a slice of numbers, a quantile value, and the expected result.
+// The function calculates the quantile for each test case and compares it to the expected result.
+// If the calculated quantile does not match the expected result, the test fails and an error message is printed.
 func TestQuantile(t *testing.T) {
 	cases := []struct {
 		numbers  []float64
