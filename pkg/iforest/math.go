@@ -5,15 +5,6 @@ import (
 	"math/rand"
 )
 
-func Clone(m [][]float64) [][]float64 {
-	clone := make([][]float64, len(m))
-	for i, row := range m {
-		clone[i] = make([]float64, len(row))
-		copy(clone[i], row)
-	}
-	return clone
-}
-
 func Sample(m [][]float64, sampleSize int) [][]float64 {
 	if sampleSize <= 0 {
 		panic("sampleSize must be greater than 0")
@@ -64,11 +55,12 @@ func RandomMatrix(rows, cols int) [][]float64 {
 }
 
 func AddScalar(m [][]float64, scalar float64) [][]float64 {
-	clone := Clone(m)
-	for i, row := range clone {
+	o := make([][]float64, len(m))
+	for i, row := range m {
+		o[i] = make([]float64, len(row))
 		for j := range row {
-			clone[i][j] += scalar
+			o[i][j] = m[i][j] + scalar
 		}
 	}
-	return clone
+	return o
 }
