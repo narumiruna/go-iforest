@@ -11,10 +11,10 @@ func TestSample(t *testing.T) {
 		{5.0, 6.0},
 		{7.0, 8.0},
 	}
-	sampleSize := 2
-	sample := Sample(matrix, sampleSize)
-	if len(sample) != sampleSize {
-		t.Errorf("Expected sample size %d, got %d", sampleSize, len(sample))
+	size := 2
+	sample := Sample(matrix, size)
+	if len(sample) != size {
+		t.Errorf("Expected size %d, got %d", size, len(sample))
 	}
 }
 
@@ -34,8 +34,8 @@ func TestColumn(t *testing.T) {
 }
 
 func TestMinMax(t *testing.T) {
-	slice := []float64{1.0, 2.0, 3.0, 4.0, 5.0}
-	min, max := MinMax(slice)
+	floats := []float64{1.0, 2.0, 3.0, 4.0, 5.0}
+	min, max := MinMax(floats)
 	if min != 1.0 {
 		t.Errorf("Expected min 1.0, got %f", min)
 	}

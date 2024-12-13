@@ -5,34 +5,34 @@ import (
 	"math/rand"
 )
 
-func Sample(m [][]float64, sampleSize int) [][]float64 {
-	if sampleSize <= 0 {
-		panic("sampleSize must be greater than 0")
+func Sample(matrix [][]float64, size int) [][]float64 {
+	if size <= 0 {
+		panic("size must be greater than 0")
 	}
 
-	if len(m) <= sampleSize {
-		return m
+	if len(matrix) <= size {
+		return matrix
 	}
 
-	perm := rand.Perm(len(m))
-	sampled := make([][]float64, sampleSize)
-	for i := 0; i < sampleSize; i++ {
-		sampled[i] = m[perm[i]]
+	perm := rand.Perm(len(matrix))
+	sampled := make([][]float64, size)
+	for i := 0; i < size; i++ {
+		sampled[i] = matrix[perm[i]]
 	}
 	return sampled
 }
 
-func Column(m [][]float64, j int) []float64 {
-	column := make([]float64, len(m))
-	for i, row := range m {
-		column[i] = row[j]
+func Column(matrix [][]float64, columnIndex int) []float64 {
+	column := make([]float64, len(matrix))
+	for i, row := range matrix {
+		column[i] = row[columnIndex]
 	}
 	return column
 }
 
-func MinMax(slice []float64) (float64, float64) {
+func MinMax(floats []float64) (float64, float64) {
 	min, max := math.Inf(1), math.Inf(-1)
-	for _, v := range slice {
+	for _, v := range floats {
 		if v < min {
 			min = v
 		}
@@ -44,23 +44,23 @@ func MinMax(slice []float64) (float64, float64) {
 }
 
 func RandomMatrix(rows, cols int) [][]float64 {
-	m := make([][]float64, rows)
+	matrix := make([][]float64, rows)
 	for i := 0; i < rows; i++ {
-		m[i] = make([]float64, cols)
+		matrix[i] = make([]float64, cols)
 		for j := 0; j < cols; j++ {
-			m[i][j] = rand.Float64()
+			matrix[i][j] = rand.Float64()
 		}
 	}
-	return m
+	return matrix
 }
 
-func AddScalar(m [][]float64, scalar float64) [][]float64 {
-	o := make([][]float64, len(m))
-	for i, row := range m {
-		o[i] = make([]float64, len(row))
+func AddScalar(matrix [][]float64, scalar float64) [][]float64 {
+	outputMatrix := make([][]float64, len(matrix))
+	for i, row := range matrix {
+		outputMatrix[i] = make([]float64, len(row))
 		for j := range row {
-			o[i][j] = m[i][j] + scalar
+			outputMatrix[i][j] = matrix[i][j] + scalar
 		}
 	}
-	return o
+	return outputMatrix
 }
