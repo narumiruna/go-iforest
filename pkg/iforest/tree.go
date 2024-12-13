@@ -1,7 +1,6 @@
 package iforest
 
 // TreeNode represents a node in the isolation tree used by the isolation forest algorithm.
-//
 // Each TreeNode contains information about the feature to split on, the split value, and references to its child nodes.
 type TreeNode struct {
 	Left       *TreeNode
@@ -12,10 +11,8 @@ type TreeNode struct {
 }
 
 // IsLeaf returns true if the node is a leaf node (i.e., has no children).
-//
 // Returns:
 //     A boolean indicating whether the node is a leaf.
-//
 // Example:
 //     node := &TreeNode{}
 //     isLeaf := node.IsLeaf()  // isLeaf == true
@@ -24,14 +21,12 @@ func (t *TreeNode) IsLeaf() bool {
 }
 
 // traceSplitIndices traverses the tree to collect the indices of features used for splitting for a given sample.
-//
 // Parameters:
-//     sample - the input Vector representing a data point.
+//     sample - the input vector representing a data point.
 //     indices - slice to accumulate the feature indices used during traversal.
-//
 // Returns:
 //     A slice of integers representing the feature indices used during traversal.
-func (t *TreeNode) traceSplitIndices(sample Vector, indices []int) []int {
+func (t *TreeNode) traceSplitIndices(sample []float64, indices []int) []int {
 	if t.IsLeaf() {
 		return indices
 	}
@@ -46,13 +41,11 @@ func (t *TreeNode) traceSplitIndices(sample Vector, indices []int) []int {
 }
 
 // FeatureImportance computes the importance of features for a given sample based on the path taken in the tree.
-//
 // Parameters:
-//     sample - the input Vector representing a data point.
-//
+//     sample - the input vector representing a data point.
 // Returns:
 //     A slice of integers where each element represents the importance (frequency) of the corresponding feature.
-func (t *TreeNode) FeatureImportance(sample Vector) []int {
+func (t *TreeNode) FeatureImportance(sample []float64) []int {
 	indices := t.traceSplitIndices(sample, []int{})
 	importance := make([]int, len(sample))
 	for _, index := range indices {

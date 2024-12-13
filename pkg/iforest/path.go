@@ -4,14 +4,11 @@ import "math"
 
 const EulerGamma = 0.5772156649
 
-// harmonicNumber computes the harmonic number H(x), approximated for real numbers using the natural logarithm and Euler-Mascheroni constant.
-//
+// harmonicNumber computes the harmonic number H(x) using an approximation for real numbers.
 // Parameters:
 //     x - the float64 value to compute the harmonic number for.
-//
 // Returns:
 //     The approximate harmonic number H(x) as a float64, where H(x) ≈ ln(x) + γ.
-//
 // Example:
 //     h := harmonicNumber(5)  // h ≈ 2.283
 func harmonicNumber(x float64) float64 {
@@ -19,13 +16,10 @@ func harmonicNumber(x float64) float64 {
 }
 
 // averagePathLength computes the average path length of unsuccessful searches in a binary search tree.
-//
 // Parameters:
 //     x - the float64 value representing the number of external nodes.
-//
 // Returns:
 //     The average path length as a float64.
-//
 // Example:
 //     l := averagePathLength(256)  // l ≈ 9.0
 func averagePathLength(x float64) float64 {
@@ -39,15 +33,12 @@ func averagePathLength(x float64) float64 {
 }
 
 // pathLength calculates the expected path length of a sample in the isolation tree.
-//
 // Parameters:
 //     vector            - the input Vector representing the sample.
 //     node              - the current TreeNode during tree traversal.
 //     currentPathLength - the current accumulated path length.
-//
 // Returns:
 //     The path length for the sample as a float64.
-//
 // This function recursively traverses the tree to compute the path length for the given sample.
 func pathLength(vector []float64, node *TreeNode, currentPathLength int) float64 {
 	if node.IsLeaf() {
