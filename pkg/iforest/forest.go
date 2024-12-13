@@ -85,7 +85,7 @@ type IsolationForest struct {
 func New() *IsolationForest {
 	options := &Options{}
 	options.SetDefaultValues()
-	return &IsolationForest{Options: &Options{}}
+	return &IsolationForest{Options: options}
 }
 
 // NewWithOptions creates a new IsolationForest with the specified options.
