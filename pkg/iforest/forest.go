@@ -114,11 +114,11 @@ func (f *IsolationForest) Fit(samples [][]float64) {
 	f.Trees = make([]*TreeNode, f.NumTrees)
 	for i := 0; i < f.NumTrees; i++ {
 		sampled := Sample(samples, f.SampleSize)
-		go func() {
+		go func(index int) {
 			defer wg.Done()
 			tree := f.BuildTree(sampled, 0)
-			f.Trees[i] = tree
-		}()
+			f.Trees[index] = tree
+		}(i)
 	}
 	wg.Wait()
 }
