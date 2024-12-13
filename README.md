@@ -26,7 +26,8 @@ import (
 func main() {
 	dim := 2
 	x := iforest.RandomMatrix(1000, dim)
-	y := iforest.RandomMatrix(10, dim).AddScalar(0.5)
+	y := iforest.RandomMatrix(10, dim)
+	y = iforest.AddScalar(y, 0.5)
 
 	model := iforest.NewWithOptions(
 		iforest.Options{
